@@ -1,0 +1,91 @@
+---
+title: "ASSIGNMENT 4"
+author: "Gonzalez, Kimberly"
+date: '2020-07-17'
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+bibliography: bibliography.bib
+---
+
+# Markdown Basics
+
+## Favorite Foods
+
+1. Pizza
+2. Sushi
+3. Tacos
+
+## Images
+
+```{r, echo = FALSE, out.width="60%", fig.cap="All Cases (Log Plot)"}
+knitr::include_graphics("10-all-cases-log.png")
+```
+\newpage
+
+## Add a Quote
+
+> "The devil doesn't come dressed in a red cape and pointy horns.
+   He comes dressed as everything you've ever wished for."
+
+## Add an Equation
+$$\sum_{i=1}^n x_i$$
+
+
+## Add a Footnote
+***
+This is a footnote.^[This is a footnote for Week 3, Assignment 4]
+
+## Add Citations
+
+*  R for Everyone @lander2014r
+*  Discovering Statistics Using R @field2012discovering
+
+# Inline Code
+
+``` {r, include = FALSE}
+library(ggplot2)
+heights_df <- read.csv("heights.csv")
+covid_df <- read.csv("us-states.csv")
+california_df <- covid_df[ which( covid_df$state == "California"), ]
+ny_df <- covid_df[ which( covid_df$state == "New York"), ]
+florida_df <- covid_df[ which( covid_df$state == "Florida"), ]
+
+```
+
+## NY Times COVID-19 Data
+``` {r, echo = FALSE, out.width="60%"}
+threeStates_df <- rbind(california_df, ny_df, florida_df)
+threeStates_df$date <- as.Date(threeStates_df$date)
+ggplot(threeStates_df, aes(date, cases)) + geom_line(aes(color = state)) + scale_y_continuous(trans = "log10") + labs(title = "All Cases (Log PLot)", y = "Cases")
+```
+
+## R4DS Height vs Earnings
+```{r, echo = FALSE, out.width="60%"}
+ggplot(heights_df, aes(height, earn)) + geom_point(aes(col= sex))  + labs(title = "Height vs. Earnings", y = "Earnings (Dollars", x = "Height (Inches)")
+```
+
+# Tables
+```{r, echo=FALSE}
+name <- c("Aragon", "Bilbo", "Frodo", "Galadriel", "Sam", "Gandalf", "Legolas", "Sauron", "Gollum")
+race <- c("Men", "Hobbit", "Hobbit", "Elf", "Hobbit", "Maia", "Elf", "Maia", "Hobbit")
+in_fellowship <- c(TRUE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE)
+ring_bearer <- c(FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE)
+age <- c(88, 129, 51, 7000, 36, 2019, 2931, 7052, 589)
+
+characters_df <- data.frame(name, race, in_fellowship, ring_bearer, age)
+
+knitr::kable(x = characters_df, caption = "One Ring to Rule Them All")
+```
+
+
+## Pandoc Table
+```{r, echo=FALSE}
+library(pander)
+characters_short_df = data.frame('Name' = c('Aragon', 'Bilbo', 'Frodo', 'Sam', 'Sauron'), 'Race' = c('Men', 'Hobbit', 'Hobbit','Hobbit', 'Maia'), 'In Fellowship?' = c('Yes', 'No', 'Yes', 'Yes', 'No'), 'Is Ring Bearer?' = c('No', 'Yes','Yes', 'Yes', 'Yes'), 'Age' = c(88, 129, 51, 36, 7052))
+
+pandoc.table(characters_short_df, style = 'simple', justify = c('left', 'left', 'left', 'left', 'center'))
+```
+
+# References
